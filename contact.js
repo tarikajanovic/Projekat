@@ -1,42 +1,68 @@
-
 function toggleMobileMenu() {
     const menuToggle = document.querySelector('.linkovi');
     const navLinks = document.querySelector('.nav-links');
-    menuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-    });
-}
-
-
-toggleMobileMenu();
-
-
-function validateContactForm() {
-    const emailInput = document.getElementById('email'); // Assuming there’s an input field with id="email"
-    const phoneInput = document.getElementById('phone'); // Assuming there’s an input field with id="phone"
-    
-    if (emailInput && phoneInput) {
-        if (emailInput.value === '' || phoneInput.value === '') {
-            alert('Please fill in all required fields.');
-            return false;
-        }
-        alert('Thank you! Your message has been sent.');
-        return true;
+    if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+    } else {
+        console.error("Menu toggle or navigation links element not found.");
     }
-    return false;
 }
 
+// Display Current Year in Footer
+function displayCurrentYear() {
+    const yearElement = document.getElementById('current-year'); // Add <span id="current-year"></span> in your footer
+    if (yearElement) {
+        const currentYear = new Date().getFullYear();
+        yearElement.textContent = currentYear;
+    }
+}
 
-function highlightActiveLink() {
+// Call the function to activate it
+displayCurrentYear();
+
+// Smooth Scroll to Sections
+function smoothScroll() {
     const links = document.querySelectorAll('.nav-links a');
-    const currentPage = window.location.pathname;
-
     links.forEach(link => {
-        if (link.getAttribute('href') === currentPage) {
-            link.classList.add('active-link');
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
+
+// Call the function to activate smooth scrolling
+smoothScroll();
+
+// Toggle Map Border Color
+function toggleMapBorderColor() {
+    const mapContainer = document.querySelector('.map-container iframe');
+    const colors = ['aliceblue', 'lightblue', 'lightgreen', 'pink'];
+    let colorIndex = 0;
+
+    document.querySelector('.map-container').addEventListener('click', () => {
+        colorIndex = (colorIndex + 1) % colors.length;
+        if (mapContainer) {
+            mapContainer.style.borderColor = colors[colorIndex];
         }
     });
 }
 
+// Call the function to enable map border color toggle
+toggleMapBorderColor();
 
-highlightActiveLink();
+document.addEventListener('DOMContentLoaded', () => {
+    displayCurrentYear();
+    smoothScroll();
+    toggleMapBorderColor();
+    toggleMobileMenu();
+});
